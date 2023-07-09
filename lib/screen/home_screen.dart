@@ -5,7 +5,6 @@ import '../component/custom_container.dart';
 import '../const/colors.dart';
 import 'memo_screen.dart';
 
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -15,7 +14,7 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         floatingActionButton: floatingActionButton(context),
         backgroundColor: BACKGROUND_COLOR,
-        appBar: CustomAppbar(false,(){}),
+        appBar: CustomAppbar(false, () {}),
         body: MemoCardView(),
       ),
     );
@@ -43,29 +42,38 @@ class MemoCardView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.separated(
       itemBuilder: (context, index) {
-        return CustomContainer(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 10.0,
-              horizontal: 14.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '메모의 첫줄',
-                  style: TextStyle(color: BLACK_COLOR, fontSize: 20),
-                ),
-                Text(
-                  '${DateTime.now().year}. ${DateTime.now().month}. ${DateTime.now().day}',
-                  style: TextStyle(color: DARKGREY_COLOR, fontSize: 16),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  '메모 둘째줄',
-                  style: TextStyle(color: DARKGREY_COLOR, fontSize: 14),
-                ),
-              ],
+        return GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => MemoScreen(),
+              ),
+            );
+          },
+          child: CustomContainer(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 10.0,
+                horizontal: 14.0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '메모의 첫줄',
+                    style: TextStyle(color: BLACK_COLOR, fontSize: 20),
+                  ),
+                  Text(
+                    '${DateTime.now().year}. ${DateTime.now().month}. ${DateTime.now().day}',
+                    style: TextStyle(color: DARKGREY_COLOR, fontSize: 16),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    '메모 둘째줄',
+                    style: TextStyle(color: DARKGREY_COLOR, fontSize: 14),
+                  ),
+                ],
+              ),
             ),
           ),
         );
