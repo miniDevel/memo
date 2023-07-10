@@ -60,7 +60,7 @@ class MemoCardView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '메모의 첫줄',
+                    'Test commit',
                     style: TextStyle(color: BLACK_COLOR, fontSize: 20),
                   ),
                   Text(
