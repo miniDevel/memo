@@ -1,64 +1,86 @@
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:memo/database/drift_database.dart';
 
-import '../component/custom_appber.dart';
+import '../component/custom_appbar.dart';
 import '../component/custom_container.dart';
 import '../const/colors.dart';
 
-class MemoScreen extends StatelessWidget {
+class MemoScreen extends StatefulWidget {
   const MemoScreen({super.key});
+
+  @override
+  State<MemoScreen> createState() => _MemoScreenState();
+}
+
+class _MemoScreenState extends State<MemoScreen> {
+  String? firstLine;
+  String? remainingLines;
 
   @override
   Widget build(BuildContext context) {
     double defaultBoxSize = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: CustomAppbar(true, () {
-        Navigator.of(context).pop();
-      }),
+      appBar: CustomAppbar(true, onSaveButton),
       backgroundColor: BACKGROUND_COLOR,
       body: CustomContainer(
         height: defaultBoxSize - 120,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: CustomTextField(),
+          child: CustomTextField(
+            onTextChanged: onTextChanged,
+          ),
         ),
       ),
     );
   }
+
+  void onTextChanged(String val) {
+    final lines = val.split('\n');
+    if (lines.isEmpty) {
+      return;
+    } else {
+      firstLine = lines.first;
+      remainingLines = lines.sublist(1).join('\n');
+    }
+  }
+
+  void onSaveButton() async {
+    if (firstLine == null && remainingLines == null) {
+      Navigator.of(context).pop();
+    } else {
+      await GetIt.I<LocalDatabase>().createMemo(
+        MemoCompanion(
+          firstLine: firstLine == null ? const Value("") : Value(firstLine!),
+          remainingLines:
+              remainingLines == null ? const Value("") : Value(remainingLines!),
+        ),
+      );
+      Navigator.of(context).pop();
+    }
+  }
 }
 
-class CustomTextField extends StatefulWidget {
-  const CustomTextField({super.key});
-
-  @override
-  State<CustomTextField> createState() => _CustomTextFieldState();
-}
-
-class _CustomTextFieldState extends State<CustomTextField> {
-  String firstLine = '';
-  String remainingLines = '';
+class CustomTextField extends StatelessWidget {
+  final ValueChanged<String>? onTextChanged;
+  const CustomTextField({
+    required this.onTextChanged,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      onChanged: (value) {
-        final lines = value.split('\n');
-        if (lines.isNotEmpty) {
-          firstLine = lines.first;
-          remainingLines = lines.sublist(1).join('\n');
-        } else {
-          firstLine = '';
-          remainingLines = '';
-        }
-        // 저장하거나 처리해야 할 로직 추가
-      },
+      onChanged: onTextChanged,
       style: TextStyle(
         color: BLACK_COLOR,
         fontSize: 20,
       ),
       maxLines: null,
       cursorColor: DARKGREY_COLOR,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: InputBorder.none,
       ),
     );
