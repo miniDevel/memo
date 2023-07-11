@@ -27,7 +27,7 @@ AppBar CustomAppbar(bool isMemo, VoidCallback onPressed) {
             SaveButton(
               onPressed: onPressed,
             ),
-            SizedBox(width: 4)
+            const SizedBox(width: 4)
           ]
         : null,
     iconTheme: IconThemeData(color: BLACK_COLOR),
@@ -53,18 +53,18 @@ class SaveButton extends StatelessWidget {
       ),
       child: ElevatedButton(
         onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: PRIMARY_COLOR,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
         child: Text(
           '완 료',
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 16,
             color: WHITE_COLOR,
-          ),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: PRIMARY_COLOR,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
           ),
         ),
       ),

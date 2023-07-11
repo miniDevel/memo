@@ -16,7 +16,6 @@ class CustomContainer extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14.0),
       child: Container(
-        child: child,
         height: height,
         decoration: BoxDecoration(
           color: WHITE_COLOR,
@@ -26,6 +25,7 @@ class CustomContainer extends StatelessWidget {
             width: 1,
           ),
         ),
+        child: child,
       ),
     );
   }
