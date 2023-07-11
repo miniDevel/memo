@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../component/custom_appber.dart';
+import '../component/custom_appbar.dart';
 import '../component/custom_container.dart';
 import '../const/colors.dart';
 import 'memo_screen.dart';
@@ -30,8 +30,8 @@ FloatingActionButton floatingActionButton(context) {
         ),
       );
     },
-    child: Icon(Icons.add),
     backgroundColor: PRIMARY_COLOR,
+    child: const Icon(Icons.add),
   );
 }
 
@@ -67,7 +67,7 @@ class MemoCardView extends StatelessWidget {
                     '${DateTime.now().year}. ${DateTime.now().month}. ${DateTime.now().day}',
                     style: TextStyle(color: DARKGREY_COLOR, fontSize: 16),
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     '메모 둘째줄',
                     style: TextStyle(color: DARKGREY_COLOR, fontSize: 14),
@@ -79,7 +79,7 @@ class MemoCardView extends StatelessWidget {
         );
       },
       separatorBuilder: (context, index) {
-        return SizedBox(height: 8);
+        return const SizedBox(height: 8);
       },
       itemCount: 4,
     );
