@@ -1,11 +1,9 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:memo/component/memo_card.dart';
 import 'package:memo/database/drift_database.dart';
 
 import '../component/custom_appbar.dart';
-import '../component/custom_container.dart';
 import '../const/colors.dart';
 import 'memo_screen.dart';
 
@@ -44,19 +42,21 @@ class MemoCardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Object>(
+    return StreamBuilder<List<Memo>>(
         stream: GetIt.I<LocalDatabase>().watchMemos(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
 
-          if (snapshot.hasData && snapshot.data!.isNull) {
-            return Center(child: Text('저장된 메모가 없습니다.'));
+          if (snapshot.hasData && snapshot.data!.isEmpty) {
+            return const Center(child: Text('저장된 메모가 없습니다.'));
           }
 
           return ListView.separated(
             itemBuilder: (context, index) {
+              final memoData = snapshot.data![index];
+
               return GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
@@ -65,38 +65,17 @@ class MemoCardView extends StatelessWidget {
                     ),
                   );
                 },
-                child: CustomContainer(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10.0,
-                      horizontal: 14.0,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Test commit',
-                          style: TextStyle(color: BLACK_COLOR, fontSize: 20),
-                        ),
-                        Text(
-                          '${DateTime.now().year}. ${DateTime.now().month}. ${DateTime.now().day}',
-                          style: TextStyle(color: DARKGREY_COLOR, fontSize: 16),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '메모 둘째줄',
-                          style: TextStyle(color: DARKGREY_COLOR, fontSize: 14),
-                        ),
-                      ],
-                    ),
-                  ),
+                child: MemoCard(
+                  firstLine: memoData.firstLine,
+                  remainLines: memoData.remainingLines,
+                  dateTime: memoData.date,
                 ),
               );
             },
             separatorBuilder: (context, index) {
               return const SizedBox(height: 8);
             },
-            itemCount: 4,
+            itemCount: snapshot.data!.length,
           );
         });
   }

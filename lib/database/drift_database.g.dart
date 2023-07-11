@@ -3,11 +3,11 @@
 part of 'drift_database.dart';
 
 // ignore_for_file: type=lint
-class $MemoTable extends Memo with TableInfo<$MemoTable, MemoData> {
+class $MemosTable extends Memos with TableInfo<$MemosTable, Memo> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $MemoTable(this.attachedDatabase, [this._alias]);
+  $MemosTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -39,11 +39,11 @@ class $MemoTable extends Memo with TableInfo<$MemoTable, MemoData> {
   @override
   List<GeneratedColumn> get $columns => [id, firstLine, remainingLines, date];
   @override
-  String get aliasedName => _alias ?? 'memo';
+  String get aliasedName => _alias ?? 'memos';
   @override
-  String get actualTableName => 'memo';
+  String get actualTableName => 'memos';
   @override
-  VerificationContext validateIntegrity(Insertable<MemoData> instance,
+  VerificationContext validateIntegrity(Insertable<Memo> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -74,9 +74,9 @@ class $MemoTable extends Memo with TableInfo<$MemoTable, MemoData> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  MemoData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Memo map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return MemoData(
+    return Memo(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       firstLine: attachedDatabase.typeMapping
@@ -89,17 +89,17 @@ class $MemoTable extends Memo with TableInfo<$MemoTable, MemoData> {
   }
 
   @override
-  $MemoTable createAlias(String alias) {
-    return $MemoTable(attachedDatabase, alias);
+  $MemosTable createAlias(String alias) {
+    return $MemosTable(attachedDatabase, alias);
   }
 }
 
-class MemoData extends DataClass implements Insertable<MemoData> {
+class Memo extends DataClass implements Insertable<Memo> {
   final int id;
   final String firstLine;
   final String remainingLines;
   final DateTime date;
-  const MemoData(
+  const Memo(
       {required this.id,
       required this.firstLine,
       required this.remainingLines,
@@ -114,8 +114,8 @@ class MemoData extends DataClass implements Insertable<MemoData> {
     return map;
   }
 
-  MemoCompanion toCompanion(bool nullToAbsent) {
-    return MemoCompanion(
+  MemosCompanion toCompanion(bool nullToAbsent) {
+    return MemosCompanion(
       id: Value(id),
       firstLine: Value(firstLine),
       remainingLines: Value(remainingLines),
@@ -123,10 +123,10 @@ class MemoData extends DataClass implements Insertable<MemoData> {
     );
   }
 
-  factory MemoData.fromJson(Map<String, dynamic> json,
+  factory Memo.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return MemoData(
+    return Memo(
       id: serializer.fromJson<int>(json['id']),
       firstLine: serializer.fromJson<String>(json['firstLine']),
       remainingLines: serializer.fromJson<String>(json['remainingLines']),
@@ -144,12 +144,12 @@ class MemoData extends DataClass implements Insertable<MemoData> {
     };
   }
 
-  MemoData copyWith(
+  Memo copyWith(
           {int? id,
           String? firstLine,
           String? remainingLines,
           DateTime? date}) =>
-      MemoData(
+      Memo(
         id: id ?? this.id,
         firstLine: firstLine ?? this.firstLine,
         remainingLines: remainingLines ?? this.remainingLines,
@@ -157,7 +157,7 @@ class MemoData extends DataClass implements Insertable<MemoData> {
       );
   @override
   String toString() {
-    return (StringBuffer('MemoData(')
+    return (StringBuffer('Memo(')
           ..write('id: $id, ')
           ..write('firstLine: $firstLine, ')
           ..write('remainingLines: $remainingLines, ')
@@ -171,32 +171,32 @@ class MemoData extends DataClass implements Insertable<MemoData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is MemoData &&
+      (other is Memo &&
           other.id == this.id &&
           other.firstLine == this.firstLine &&
           other.remainingLines == this.remainingLines &&
           other.date == this.date);
 }
 
-class MemoCompanion extends UpdateCompanion<MemoData> {
+class MemosCompanion extends UpdateCompanion<Memo> {
   final Value<int> id;
   final Value<String> firstLine;
   final Value<String> remainingLines;
   final Value<DateTime> date;
-  const MemoCompanion({
+  const MemosCompanion({
     this.id = const Value.absent(),
     this.firstLine = const Value.absent(),
     this.remainingLines = const Value.absent(),
     this.date = const Value.absent(),
   });
-  MemoCompanion.insert({
+  MemosCompanion.insert({
     this.id = const Value.absent(),
     required String firstLine,
     required String remainingLines,
     this.date = const Value.absent(),
   })  : firstLine = Value(firstLine),
         remainingLines = Value(remainingLines);
-  static Insertable<MemoData> custom({
+  static Insertable<Memo> custom({
     Expression<int>? id,
     Expression<String>? firstLine,
     Expression<String>? remainingLines,
@@ -210,12 +210,12 @@ class MemoCompanion extends UpdateCompanion<MemoData> {
     });
   }
 
-  MemoCompanion copyWith(
+  MemosCompanion copyWith(
       {Value<int>? id,
       Value<String>? firstLine,
       Value<String>? remainingLines,
       Value<DateTime>? date}) {
-    return MemoCompanion(
+    return MemosCompanion(
       id: id ?? this.id,
       firstLine: firstLine ?? this.firstLine,
       remainingLines: remainingLines ?? this.remainingLines,
@@ -243,7 +243,7 @@ class MemoCompanion extends UpdateCompanion<MemoData> {
 
   @override
   String toString() {
-    return (StringBuffer('MemoCompanion(')
+    return (StringBuffer('MemosCompanion(')
           ..write('id: $id, ')
           ..write('firstLine: $firstLine, ')
           ..write('remainingLines: $remainingLines, ')
@@ -255,10 +255,10 @@ class MemoCompanion extends UpdateCompanion<MemoData> {
 
 abstract class _$LocalDatabase extends GeneratedDatabase {
   _$LocalDatabase(QueryExecutor e) : super(e);
-  late final $MemoTable memo = $MemoTable(this);
+  late final $MemosTable memos = $MemosTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [memo];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [memos];
 }

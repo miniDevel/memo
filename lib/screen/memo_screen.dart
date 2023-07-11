@@ -4,7 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:memo/database/drift_database.dart';
 
 import '../component/custom_appbar.dart';
-import '../component/custom_container.dart';
+import '../const/custom_container.dart';
 import '../const/colors.dart';
 
 class MemoScreen extends StatefulWidget {
@@ -52,7 +52,7 @@ class _MemoScreenState extends State<MemoScreen> {
       Navigator.of(context).pop();
     } else {
       await GetIt.I<LocalDatabase>().createMemo(
-        MemoCompanion(
+        MemosCompanion(
           firstLine: firstLine == null ? const Value("") : Value(firstLine!),
           remainingLines:
               remainingLines == null ? const Value("") : Value(remainingLines!),

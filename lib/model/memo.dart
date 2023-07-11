@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 
-class Memo extends Table{
+class Memos extends Table{
   IntColumn get id => integer().autoIncrement()();
 
   TextColumn get firstLine => text()();

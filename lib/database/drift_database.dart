@@ -9,25 +9,25 @@ part 'drift_database.g.dart';
 
 @DriftDatabase(
   tables: [
-    Memo,
+    Memos,
   ],
 )
 class LocalDatabase extends _$LocalDatabase {
   LocalDatabase() : super(_openConnection());
 
-  Future<int> createMemo(MemoCompanion data) => into(memo).insert(data);
+  Future<int> createMemo(MemosCompanion data) => into(memos).insert(data);
 
-  Future<MemoData> getMemoById(int id) =>
-      (select(memo)..where((tbl) => tbl.id.equals(id))).getSingle();
+  Future<Memo> getMemoById(int id) =>
+      (select(memos)..where((tbl) => tbl.id.equals(id))).getSingle();
 
-  Future<int> updateMemoById(int id, MemoCompanion data) =>
-      (update(memo)..where((tbl) => tbl.id.equals(id))).write(data);
+  Future<int> updateMemoById(int id, MemosCompanion data) =>
+      (update(memos)..where((tbl) => tbl.id.equals(id))).write(data);
 
   Future<int> removeMemo(int id) =>
-      (delete(memo)..where((tbl) => tbl.id.equals(id))).go();
+      (delete(memos)..where((tbl) => tbl.id.equals(id))).go();
   
-  Stream<List<MemoData>> watchMemos (){
-    return select(memo).watch();
+  Stream<List<Memo>> watchMemos (){
+    return select(memos).watch();
   }
 
   @override
