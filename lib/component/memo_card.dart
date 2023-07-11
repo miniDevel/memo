@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:memo/const/colors.dart';
-
-import '../const/custom_container.dart';
+import 'package:memo/const/custom_container.dart';
 
 class MemoCard extends StatelessWidget {
   final String firstLine;

@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:memo/component/memo_card.dart';
 import 'package:memo/database/drift_database.dart';
 
-import '../component/custom_appbar.dart';
+import '../component/home_screen_appbar.dart';
 import '../const/colors.dart';
 import 'memo_screen.dart';
 
@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         floatingActionButton: floatingActionButton(context),
         backgroundColor: BACKGROUND_COLOR,
-        appBar: CustomAppbar(false, () {}),
+        appBar: homeScreenAppbar(),
         body: MemoCardView(),
       ),
     );

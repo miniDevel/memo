@@ -1,20 +1,26 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:memo/component/memo_screen_appbar.dart';
 import 'package:memo/database/drift_database.dart';
 
-import '../component/custom_appbar.dart';
 import '../const/custom_container.dart';
 import '../const/colors.dart';
 
 class MemoScreen extends StatefulWidget {
-  const MemoScreen({super.key});
+  final int? memoId;
+
+  const MemoScreen({
+    this.memoId,
+    super.key,
+  });
 
   @override
   State<MemoScreen> createState() => _MemoScreenState();
 }
 
 class _MemoScreenState extends State<MemoScreen> {
+  DateTime dateTime = DateTime.now();
   String? firstLine;
   String? remainingLines;
 
@@ -23,7 +29,7 @@ class _MemoScreenState extends State<MemoScreen> {
     double defaultBoxSize = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: CustomAppbar(true, onSaveButton),
+      appBar: memoScreenAppbar(dateTime,onSaveButton),
       backgroundColor: BACKGROUND_COLOR,
       body: CustomContainer(
         height: defaultBoxSize - 120,
@@ -44,6 +50,7 @@ class _MemoScreenState extends State<MemoScreen> {
     } else {
       firstLine = lines.first;
       remainingLines = lines.sublist(1).join('\n');
+      dateTime = DateTime.now();
     }
   }
 

@@ -1,35 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:memo/const/colors.dart';
 
-import '../const/colors.dart';
-
-AppBar CustomAppbar(bool isMemo, VoidCallback onPressed) {
+AppBar memoScreenAppbar(DateTime dateTime,VoidCallback onPressed) {
   return AppBar(
     centerTitle: true,
-    title: isMemo
-        ? Text(
-            '${DateTime.now().year}. ${DateTime.now().month}. ${DateTime.now().day}',
-            style: TextStyle(
-              color: DARKGREY_COLOR,
-              fontSize: 26,
-              fontWeight: FontWeight.w600,
-            ),
-          )
-        : Text(
-            '메 모',
-            style: TextStyle(
-              color: DARKGREY_COLOR,
-              fontSize: 26,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-    actions: isMemo
-        ? [
-            SaveButton(
-              onPressed: onPressed,
-            ),
-            const SizedBox(width: 4)
-          ]
-        : null,
+    title: Text(
+      '${dateTime.year}. ${dateTime.month}. ${dateTime.day}',
+      style: TextStyle(
+        color: DARKGREY_COLOR,
+        fontSize: 26,
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+    actions: [
+      SaveButton(onPressed: onPressed),
+      const SizedBox(width: 4),
+    ],
     iconTheme: IconThemeData(color: BLACK_COLOR),
     elevation: 0,
     backgroundColor: BACKGROUND_COLOR,

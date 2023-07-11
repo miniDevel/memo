@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:memo/model/memo.dart';
+import 'package:path/path.dart' as p ;
 import 'package:path_provider/path_provider.dart';
-import '../model/memo.dart';
-import 'package:path/path.dart' as p;
 
 part 'drift_database.g.dart';
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'colors.dart';
+import 'package:memo/const/colors.dart';
+
 
 class CustomContainer extends StatelessWidget {
   final Widget child;
