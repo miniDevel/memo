@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 
 import '../component/custom_appber.dart';
@@ -41,16 +43,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      onChanged: (value) {
-        final lines = value.split('\n');
+      onChanged: (String val) {
+        final lines = val.split('\n');
         if (lines.isNotEmpty) {
           firstLine = lines.first;
           remainingLines = lines.sublist(1).join('\n');
-        } else {
-          firstLine = '';
-          remainingLines = '';
         }
-        // 저장하거나 처리해야 할 로직 추가
       },
       style: TextStyle(
         color: BLACK_COLOR,
