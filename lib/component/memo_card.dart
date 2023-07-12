@@ -20,6 +20,8 @@ class MemoCard extends StatelessWidget {
     final limitedRemainLines = onlyFirstRemainLines.length > 30
         ? "${onlyFirstRemainLines.substring(0, 30)}..."
         : onlyFirstRemainLines;
+    final limitedFirstLine =
+        firstLine.length > 20 ? "${firstLine.substring(0, 20)}..." : firstLine;
 
     return CustomContainer(
       child: Padding(
@@ -31,11 +33,11 @@ class MemoCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              firstLine,
+              limitedFirstLine,
               style: TextStyle(color: BLACK_COLOR, fontSize: 20),
             ),
             Text(
-              '${dateTime.year}. ${dateTime.month}. ${dateTime.day}',
+              '${dateTime.year}. ${dateTime.month}. ${dateTime.day}  ${dateTime.hour}시',
               style: TextStyle(color: DARKGREY_COLOR, fontSize: 16),
             ),
             const SizedBox(height: 4),

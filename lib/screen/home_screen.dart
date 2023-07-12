@@ -61,7 +61,10 @@ class MemoCardView extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => MemoScreen(),
+                      builder: (context) => MemoScreen(
+                        memoId: memoData.id,
+                        dateTime: memoData.date,
+                      ),
                     ),
                   );
                 },

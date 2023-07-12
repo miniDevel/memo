@@ -6,10 +6,10 @@ AppBar homeScreenAppbar() {
   return AppBar(
     centerTitle: true,
     title: Text(
-      '메 모',
+      'M E M O',
       style: TextStyle(
         color: DARKGREY_COLOR,
-        fontSize: 26,
+        fontSize: 30,
         fontWeight: FontWeight.w600,
       ),
     ),

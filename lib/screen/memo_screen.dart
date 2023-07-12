@@ -9,9 +9,11 @@ import '../const/colors.dart';
 
 class MemoScreen extends StatefulWidget {
   final int? memoId;
+  final DateTime? dateTime;
 
   const MemoScreen({
     this.memoId,
+    this.dateTime,
     super.key,
   });
 
@@ -20,25 +22,54 @@ class MemoScreen extends StatefulWidget {
 }
 
 class _MemoScreenState extends State<MemoScreen> {
-  DateTime dateTime = DateTime.now();
+  DateTime? dateTime;
   String? firstLine;
   String? remainingLines;
 
   @override
   Widget build(BuildContext context) {
     double defaultBoxSize = MediaQuery.of(context).size.height;
+    if (widget.dateTime != null) {
+      dateTime = widget.dateTime;
+    }
 
-    return Scaffold(
-      appBar: memoScreenAppbar(dateTime,onSaveButton),
-      backgroundColor: BACKGROUND_COLOR,
-      body: CustomContainer(
-        height: defaultBoxSize - 120,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: CustomTextField(
-            onTextChanged: onTextChanged,
-          ),
-        ),
+    if (dateTime == null) {
+      dateTime = DateTime.now();
+    }
+
+    return SafeArea(
+      child: Scaffold(
+        appBar: memoScreenAppbar(dateTime!, onSaveButton),
+        backgroundColor: BACKGROUND_COLOR,
+        body: FutureBuilder<Memo>(
+            future: widget.memoId == null
+                ? null
+                : GetIt.I<LocalDatabase>().getMemoById(widget.memoId!),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text('메모를 불러올수 없습니다.'),
+                );
+              }
+
+              if (snapshot.connectionState != ConnectionState.none &&
+                  !snapshot.hasData) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              return CustomContainer(
+                height: defaultBoxSize - 120,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: CustomTextField(
+                    initialValue: snapshot.data == null
+                        ? ""
+                        : "${snapshot.data!.firstLine}\n${snapshot.data!.remainingLines}",
+                    onTextChanged: onTextChanged,
+                  ),
+                ),
+              );
+            }),
       ),
     );
   }
@@ -68,18 +99,26 @@ class _MemoScreenState extends State<MemoScreen> {
       Navigator.of(context).pop();
     }
   }
+
 }
 
 class CustomTextField extends StatelessWidget {
-  final ValueChanged<String>? onTextChanged;
+  final String initialValue;
+  final ValueChanged<String> onTextChanged;
+
   const CustomTextField({
     required this.onTextChanged,
+    required this.initialValue,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController controller =
+        TextEditingController(text: initialValue);
+
     return TextField(
+      controller: controller,
       onChanged: onTextChanged,
       style: TextStyle(
         color: BLACK_COLOR,
