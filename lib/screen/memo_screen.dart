@@ -86,7 +86,7 @@ class _MemoScreenState extends State<MemoScreen> {
       firstLine = lines.first;
       remainingLines = lines.sublist(1).join('\n');
       dateTime = DateTime.now();
-    }
+          }
   }
 
   void onEditButton() async {
@@ -99,6 +99,7 @@ class _MemoScreenState extends State<MemoScreen> {
           firstLine: firstLine == null ? const Value("") : Value(firstLine!),
           remainingLines:
               remainingLines == null ? const Value("") : Value(remainingLines!),
+          date: Value(DateTime.now()),
         ),
       );
       Navigator.of(context).pop();
@@ -114,6 +115,7 @@ class _MemoScreenState extends State<MemoScreen> {
           firstLine: firstLine == null ? const Value("") : Value(firstLine!),
           remainingLines:
               remainingLines == null ? const Value("") : Value(remainingLines!),
+          date: Value(DateTime.now()),
         ),
       );
       Navigator.of(context).pop();

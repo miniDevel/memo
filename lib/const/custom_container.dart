@@ -18,6 +18,7 @@ class CustomContainer extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14.0),
       child: Container(
         height: height,
+        width: double.infinity,
         decoration: BoxDecoration(
           color: WHITE_COLOR,
           borderRadius: BorderRadius.circular(20),

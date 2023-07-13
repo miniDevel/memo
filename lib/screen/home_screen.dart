@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:memo/component/memo_card.dart';
+import 'package:memo/const/custom_button.dart';
 import 'package:memo/database/drift_database.dart';
 
 import '../component/home_screen_appbar.dart';
@@ -37,8 +38,15 @@ FloatingActionButton floatingActionButton(context) {
   );
 }
 
-class MemoCardView extends StatelessWidget {
+class MemoCardView extends StatefulWidget {
   const MemoCardView({super.key});
+
+  @override
+  State<MemoCardView> createState() => _MemoCardViewState();
+}
+
+class _MemoCardViewState extends State<MemoCardView> {
+  bool showButton = false;
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +66,16 @@ class MemoCardView extends StatelessWidget {
               final memoData = snapshot.data![index];
 
               return GestureDetector(
+                onHorizontalDragUpdate: (details) {
+                  setState(() {
+                    showButton = details.delta.dx < -10;
+                  });
+                },
+                onHorizontalDragEnd: (_) {
+                  showButton = false;
+                },
                 onTap: () {
-                 Navigator.of(context).push(
+                  Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => MemoScreen(
                         memoId: memoData.id,
@@ -68,10 +84,19 @@ class MemoCardView extends StatelessWidget {
                     ),
                   );
                 },
-                child: MemoCard(
-                  firstLine: memoData.firstLine,
-                  remainLines: memoData.remainingLines,
-                  dateTime: memoData.date,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: MemoCard(
+                        firstLine: memoData.firstLine,
+                        remainLines: memoData.remainingLines,
+                        dateTime: memoData.date,
+                      ),
+                    ),
+                    if(showButton) CustomButton(label: "삭 제", onPressed: (){
+                      GetIt.I<LocalDatabase>().removeMemo(memoData.id);
+                    })
+                  ],
                 ),
               );
             },
