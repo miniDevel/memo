@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:memo/model/memo.dart';
-import 'package:path/path.dart' as p ;
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 part 'drift_database.g.dart';
@@ -25,9 +25,16 @@ class LocalDatabase extends _$LocalDatabase {
 
   Future<int> removeMemo(int id) =>
       (delete(memos)..where((tbl) => tbl.id.equals(id))).go();
-  
-  Stream<List<Memo>> watchMemos (){
-    return select(memos).watch();
+
+  Stream<List<Memo>> watchMemos() {
+    return (select(memos)
+          ..orderBy([
+            (tbl) => OrderingTerm(
+                  expression: tbl.date,
+                  mode: OrderingMode.desc,
+                )
+          ]))
+        .watch();
   }
 
   @override

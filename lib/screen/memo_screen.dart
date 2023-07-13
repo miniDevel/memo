@@ -2,16 +2,19 @@ import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:memo/component/memo_screen_appbar.dart';
+import 'package:memo/const/custom_dialog.dart';
 import 'package:memo/database/drift_database.dart';
 
 import '../const/custom_container.dart';
 import '../const/colors.dart';
 
 class MemoScreen extends StatefulWidget {
+  final bool isEdit;
   final int? memoId;
   final DateTime? dateTime;
 
   const MemoScreen({
+    required this.isEdit,
     this.memoId,
     this.dateTime,
     super.key,
@@ -33,37 +36,57 @@ class _MemoScreenState extends State<MemoScreen> {
       dateTime = widget.dateTime;
     }
 
-    if (dateTime == null) {
-      dateTime = DateTime.now();
-    }
+    dateTime ??= DateTime.now();
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: memoScreenAppbar(
-          dateTime!,
-          true,
-          (){},
-          widget.memoId == null ? onSaveButton : onEditButton,
-          widget.memoId == null ? "완 료" : "수 정",
-        ),
-        backgroundColor: BACKGROUND_COLOR,
-        body: FutureBuilder<Memo>(
-            future: widget.memoId == null
-                ? null
-                : GetIt.I<LocalDatabase>().getMemoById(widget.memoId!),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Center(
+    return FutureBuilder<Memo>(
+        future: widget.memoId == null
+            ? null
+            : GetIt.I<LocalDatabase>().getMemoById(widget.memoId!),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return SafeArea(
+              child: Scaffold(
+                backgroundColor: BACKGROUND_COLOR,
+                body: Center(
                   child: Text('메모를 불러올수 없습니다.'),
-                );
-              }
+                ),
+              ),
+            );
+          }
 
-              if (snapshot.connectionState != ConnectionState.none &&
-                  !snapshot.hasData) {
-                return Center(child: CircularProgressIndicator());
-              }
+          if (snapshot.connectionState != ConnectionState.none &&
+              !snapshot.hasData) {
+            return SafeArea(
+              child: Scaffold(
+                backgroundColor: BACKGROUND_COLOR,
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            );
+          }
 
-              return CustomContainer(
+          return SafeArea(
+            child: Scaffold(
+              appBar: memoScreenAppbar(
+                dateTime!,
+                widget.isEdit,
+                ()async{
+                  final result = await showDialog(context: context, builder: (context){
+                    return CustomDialog();
+                  },);
+
+                  if(result == true){
+                    GetIt.I<LocalDatabase>().removeMemo(snapshot.data!.id);
+                    Navigator.of(context).pop();
+                  }
+                },
+                //-------------------------------------------
+                widget.memoId == null ? onSaveButton : onEditButton,
+                widget.memoId == null ? "완 료" : "수 정",
+              ),
+              backgroundColor: BACKGROUND_COLOR,
+              body: CustomContainer(
                 height: defaultBoxSize - 120,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -74,10 +97,10 @@ class _MemoScreenState extends State<MemoScreen> {
                     onTextChanged: onTextChanged,
                   ),
                 ),
-              );
-            }),
-      ),
-    );
+              ),
+            ),
+          );
+        });
   }
 
   void onTextChanged(String val) {
@@ -88,7 +111,7 @@ class _MemoScreenState extends State<MemoScreen> {
       firstLine = lines.first;
       remainingLines = lines.sublist(1).join('\n');
       dateTime = DateTime.now();
-          }
+    }
   }
 
   void onEditButton() async {

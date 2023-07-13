@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:memo/component/memo_card.dart';
+import 'package:memo/const/custom_dialog.dart';
 import 'package:memo/database/drift_database.dart';
 
 import '../component/home_screen_appbar.dart';
@@ -28,7 +29,9 @@ FloatingActionButton floatingActionButton(context) {
     onPressed: () {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => MemoScreen(),
+          builder: (context) => MemoScreen(
+            isEdit: false,
+          ),
         ),
       );
     },
@@ -79,7 +82,10 @@ class _MemoCardViewState extends State<MemoCardView> {
                   padding: EdgeInsets.only(right: 16.0),
                   child: Text(
                     "삭 제",
-                    style: TextStyle(color: WHITE_COLOR),
+                    style: TextStyle(
+                        color: WHITE_COLOR,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16),
                   ),
                 ),
                 confirmDismiss: (direction) async {
@@ -87,38 +93,20 @@ class _MemoCardViewState extends State<MemoCardView> {
                     final result = await showDialog(
                       context: context,
                       builder: (context) {
-                        return AlertDialog(
-                          title: Text('삭 제'),
-                          content: Text('메모를 삭제 합니다.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(false);
-                              },
-                              child: Text('아니오'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(true);
-                              },
-                              child: Text('삭 제'),
-                            ),
-                          ],
-                        );
+                        return CustomDialog();
                       },
                     );
                     if (result == true) {
                       GetIt.I<LocalDatabase>().removeMemo(memoData.id);
-                      return true;
                     }
                   }
-                  return false;
                 },
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => MemoScreen(
+                          isEdit: true,
                           memoId: memoData.id,
                           dateTime: memoData.date,
                         ),
