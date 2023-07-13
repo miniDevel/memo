@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:memo/const/colors.dart';
 import 'package:memo/const/custom_button.dart';
 
-AppBar memoScreenAppbar(DateTime dateTime,VoidCallback onPressed,String label) {
+AppBar memoScreenAppbar(
+  DateTime dateTime,
+  bool isEdit,
+  VoidCallback onIconPressed,
+  VoidCallback onButtonPressed,
+  String label,
+) {
   return AppBar(
     centerTitle: true,
     title: Text(
@@ -14,7 +20,11 @@ AppBar memoScreenAppbar(DateTime dateTime,VoidCallback onPressed,String label) {
       ),
     ),
     actions: [
-      CustomButton(onPressed: onPressed,label: label,),
+      isEdit ? IconButton(onPressed: onIconPressed, icon: Icon(Icons.delete)) : Text(''),
+      CustomButton(
+        onPressed: onButtonPressed,
+        label: label,
+      ),
       const SizedBox(width: 4),
     ],
     iconTheme: IconThemeData(color: BLACK_COLOR),
@@ -22,4 +32,3 @@ AppBar memoScreenAppbar(DateTime dateTime,VoidCallback onPressed,String label) {
     backgroundColor: BACKGROUND_COLOR,
   );
 }
-

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:memo/component/memo_card.dart';
-import 'package:memo/const/custom_button.dart';
 import 'package:memo/database/drift_database.dart';
 
 import '../component/home_screen_appbar.dart';
@@ -46,8 +45,6 @@ class MemoCardView extends StatefulWidget {
 }
 
 class _MemoCardViewState extends State<MemoCardView> {
-  bool showButton = false;
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Memo>>(
@@ -58,45 +55,81 @@ class _MemoCardViewState extends State<MemoCardView> {
           }
 
           if (snapshot.hasData && snapshot.data!.isEmpty) {
-            return const Center(child: Text('저장된 메모가 없습니다.'));
+            return const Center(
+              child: Text(
+                '저장된 메모가 없습니다.',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            );
           }
 
           return ListView.separated(
             itemBuilder: (context, index) {
               final memoData = snapshot.data![index];
 
-              return GestureDetector(
-                onHorizontalDragUpdate: (details) {
-                  setState(() {
-                    showButton = details.delta.dx < -10;
-                  });
-                },
-                onHorizontalDragEnd: (_) {
-                  showButton = false;
-                },
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => MemoScreen(
-                        memoId: memoData.id,
-                        dateTime: memoData.date,
-                      ),
-                    ),
-                  );
-                },
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: MemoCard(
-                        firstLine: memoData.firstLine,
-                        remainLines: memoData.remainingLines,
-                        dateTime: memoData.date,
-                      ),
-                    ),
-                    if(showButton) CustomButton(label: "삭 제", onPressed: (){
+              return Dismissible(
+                key: Key(memoData.id.toString()),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  color: PRIMARY_COLOR,
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: Text(
+                    "삭 제",
+                    style: TextStyle(color: WHITE_COLOR),
+                  ),
+                ),
+                confirmDismiss: (direction) async {
+                  if (direction == DismissDirection.endToStart) {
+                    final result = await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('삭 제'),
+                          content: Text('메모를 삭제 합니다.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                              child: Text('아니오'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
+                              child: Text('삭 제'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                    if (result == true) {
                       GetIt.I<LocalDatabase>().removeMemo(memoData.id);
-                    })
-                  ],
+                      return true;
+                    }
+                  }
+                  return false;
+                },
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => MemoScreen(
+                          memoId: memoData.id,
+                          dateTime: memoData.date,
+                        ),
+                      ),
+                    );
+                  },
+                  child: MemoCard(
+                    firstLine: memoData.firstLine,
+                    remainLines: memoData.remainingLines,
+                    dateTime: memoData.date,
+                  ),
                 ),
               );
             },

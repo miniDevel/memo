@@ -41,6 +41,8 @@ class _MemoScreenState extends State<MemoScreen> {
       child: Scaffold(
         appBar: memoScreenAppbar(
           dateTime!,
+          true,
+          (){},
           widget.memoId == null ? onSaveButton : onEditButton,
           widget.memoId == null ? "완 료" : "수 정",
         ),
