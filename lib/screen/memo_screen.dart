@@ -39,7 +39,11 @@ class _MemoScreenState extends State<MemoScreen> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: memoScreenAppbar(dateTime!, onSaveButton),
+        appBar: memoScreenAppbar(
+          dateTime!,
+          widget.memoId == null ? onSaveButton : onEditButton,
+          widget.memoId == null ? "완 료" : "수 정",
+        ),
         backgroundColor: BACKGROUND_COLOR,
         body: FutureBuilder<Memo>(
             future: widget.memoId == null
@@ -85,6 +89,22 @@ class _MemoScreenState extends State<MemoScreen> {
     }
   }
 
+  void onEditButton() async {
+    if (firstLine == null && remainingLines == null) {
+      Navigator.of(context).pop();
+    } else {
+      await GetIt.I<LocalDatabase>().updateMemoById(
+        widget.memoId!,
+        MemosCompanion(
+          firstLine: firstLine == null ? const Value("") : Value(firstLine!),
+          remainingLines:
+              remainingLines == null ? const Value("") : Value(remainingLines!),
+        ),
+      );
+      Navigator.of(context).pop();
+    }
+  }
+
   void onSaveButton() async {
     if (firstLine == null && remainingLines == null) {
       Navigator.of(context).pop();
@@ -99,7 +119,6 @@ class _MemoScreenState extends State<MemoScreen> {
       Navigator.of(context).pop();
     }
   }
-
 }
 
 class CustomTextField extends StatelessWidget {

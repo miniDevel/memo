@@ -59,7 +59,7 @@ class MemoCardView extends StatelessWidget {
 
               return GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(
+                 Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => MemoScreen(
                         memoId: memoData.id,

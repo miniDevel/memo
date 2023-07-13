@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:memo/const/colors.dart';
 
-AppBar memoScreenAppbar(DateTime dateTime,VoidCallback onPressed) {
+AppBar memoScreenAppbar(DateTime dateTime,VoidCallback onPressed,String label) {
   return AppBar(
     centerTitle: true,
     title: Text(
@@ -13,7 +13,7 @@ AppBar memoScreenAppbar(DateTime dateTime,VoidCallback onPressed) {
       ),
     ),
     actions: [
-      SaveButton(onPressed: onPressed),
+      SaveButton(onPressed: onPressed,label: label,),
       const SizedBox(width: 4),
     ],
     iconTheme: IconThemeData(color: BLACK_COLOR),
@@ -24,8 +24,10 @@ AppBar memoScreenAppbar(DateTime dateTime,VoidCallback onPressed) {
 
 class SaveButton extends StatelessWidget {
   final VoidCallback onPressed;
+  final String label;
 
   const SaveButton({
+    required this. label,
     required this.onPressed,
     super.key,
   });
@@ -46,7 +48,7 @@ class SaveButton extends StatelessWidget {
           ),
         ),
         child: Text(
-          '완 료',
+          label,
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 16,
