@@ -20,7 +20,7 @@ AppBar memoScreenAppbar(
       ),
     ),
     actions: [
-      isEdit ? IconButton(onPressed: onIconPressed, icon: Icon(Icons.delete)) : Text(''),
+      isEdit ? IconButton(onPressed: onIconPressed, icon: const Icon(Icons.delete)) : const Text(''),
       CustomButton(
         onPressed: onButtonPressed,
         label: label,

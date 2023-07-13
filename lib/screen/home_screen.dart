@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
         floatingActionButton: floatingActionButton(context),
         backgroundColor: BACKGROUND_COLOR,
         appBar: homeScreenAppbar(),
-        body: MemoCardView(),
+        body: const MemoCardView(),
       ),
     );
   }
@@ -29,7 +29,7 @@ FloatingActionButton floatingActionButton(context) {
     onPressed: () {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => MemoScreen(
+          builder: (context) => const MemoScreen(
             isEdit: false,
           ),
         ),
@@ -79,7 +79,7 @@ class _MemoCardViewState extends State<MemoCardView> {
                 background: Container(
                   color: PRIMARY_COLOR,
                   alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(right: 16.0),
+                  padding: const EdgeInsets.only(right: 16.0),
                   child: Text(
                     "삭 제",
                     style: TextStyle(
@@ -93,13 +93,14 @@ class _MemoCardViewState extends State<MemoCardView> {
                     final result = await showDialog(
                       context: context,
                       builder: (context) {
-                        return CustomDialog();
+                        return const CustomDialog();
                       },
                     );
                     if (result == true) {
                       GetIt.I<LocalDatabase>().removeMemo(memoData.id);
                     }
                   }
+                  return ;
                 },
                 child: GestureDetector(
                   onTap: () {

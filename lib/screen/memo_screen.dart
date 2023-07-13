@@ -47,7 +47,7 @@ class _MemoScreenState extends State<MemoScreen> {
             return SafeArea(
               child: Scaffold(
                 backgroundColor: BACKGROUND_COLOR,
-                body: Center(
+                body: const Center(
                   child: Text('메모를 불러올수 없습니다.'),
                 ),
               ),
@@ -59,7 +59,7 @@ class _MemoScreenState extends State<MemoScreen> {
             return SafeArea(
               child: Scaffold(
                 backgroundColor: BACKGROUND_COLOR,
-                body: Center(
+                body: const Center(
                   child: CircularProgressIndicator(),
                 ),
               ),
@@ -73,7 +73,7 @@ class _MemoScreenState extends State<MemoScreen> {
                 widget.isEdit,
                 ()async{
                   final result = await showDialog(context: context, builder: (context){
-                    return CustomDialog();
+                    return const CustomDialog();
                   },);
 
                   if(result == true){
@@ -81,7 +81,6 @@ class _MemoScreenState extends State<MemoScreen> {
                     Navigator.of(context).pop();
                   }
                 },
-                //-------------------------------------------
                 widget.memoId == null ? onSaveButton : onEditButton,
                 widget.memoId == null ? "완 료" : "수 정",
               ),
