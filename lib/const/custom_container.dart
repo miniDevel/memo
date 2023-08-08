@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:memo/const/colors.dart';
-
+import 'package:memo/const/theme_colors.dart';
 
 class CustomContainer extends StatelessWidget {
+  final ThemeColors theme;
   final Widget child;
   final double? height;
 
   const CustomContainer({
+    required this.theme,
     this.height,
     required this.child,
     super.key,
@@ -20,10 +21,10 @@ class CustomContainer extends StatelessWidget {
         height: height,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: WHITE_COLOR,
+          color: theme.WHITE_COLOR,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: LIGHTGREY_COLOR,
+            color: theme.LIGHTGREY_COLOR,
             width: 1,
           ),
         ),

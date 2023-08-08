@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:memo/const/colors.dart';
+import 'package:memo/const/theme_colors.dart';
 
 class CustomButton extends StatelessWidget {
+  final ThemeColors theme;
   final VoidCallback onPressed;
   final String label;
 
   const CustomButton({
-    required this. label,
+    required this.theme,
+    required this.label,
     required this.onPressed,
     super.key,
   });
@@ -21,7 +23,7 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: PRIMARY_COLOR,
+          backgroundColor: theme.PRIMARY_COLOR,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -31,7 +33,7 @@ class CustomButton extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 16,
-            color: WHITE_COLOR,
+            color: theme.WHITE_COLOR,
           ),
         ),
       ),

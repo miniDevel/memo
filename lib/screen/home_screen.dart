@@ -3,51 +3,106 @@ import 'package:get_it/get_it.dart';
 import 'package:memo/component/memo_card.dart';
 import 'package:memo/const/custom_dialog.dart';
 import 'package:memo/database/drift_database.dart';
-
-import '../component/home_screen_appbar.dart';
-import '../const/colors.dart';
+import 'package:memo/screen/settimg_screen.dart';
+import '../const/theme_colors.dart';
 import 'memo_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  final ThemeColors theme;
+
+  const HomeScreen({
+    required this.theme,
+    super.key,
+  });
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late ThemeColors theme;
+
+  @override
+  void initState() {
+    super.initState();
+    theme = widget.theme;
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         floatingActionButton: floatingActionButton(context),
-        backgroundColor: BACKGROUND_COLOR,
+        backgroundColor: theme.BACKGROUND_COLOR,
         appBar: homeScreenAppbar(),
-        body: const MemoCardView(),
+        body: MemoCardView(
+          theme: theme,
+        ),
       ),
+    );
+  }
+
+  FloatingActionButton floatingActionButton(context) {
+    return FloatingActionButton(
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => MemoScreen(
+              isEdit: false,
+              theme: theme,
+            ),
+          ),
+        );
+      },
+      backgroundColor: theme.PRIMARY_COLOR,
+      child: const Icon(Icons.add),
+    );
+  }
+
+  AppBar homeScreenAppbar() {
+    return AppBar(
+      centerTitle: true,
+      title: Text(
+        'M E M O',
+        style: TextStyle(
+          color: theme.DARKGREY_COLOR,
+          fontSize: 30,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      iconTheme: IconThemeData(color: theme.BLACK_COLOR),
+      elevation: 0,
+      backgroundColor: theme.BACKGROUND_COLOR,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => SettingScreen(
+                  theme: theme,
+                ),
+              ),
+            );
+          },
+          icon: Icon(
+            Icons.color_lens_outlined,
+            size: 30,
+            color: theme.DARKGREY_COLOR,
+          ),
+        ),
+      ],
     );
   }
 }
 
-FloatingActionButton floatingActionButton(context) {
-  return FloatingActionButton(
-    onPressed: () {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const MemoScreen(
-            isEdit: false,
-          ),
-        ),
-      );
-    },
-    backgroundColor: PRIMARY_COLOR,
-    child: const Icon(Icons.add),
-  );
-}
+class MemoCardView extends StatelessWidget {
+  final ThemeColors theme;
 
-class MemoCardView extends StatefulWidget {
-  const MemoCardView({super.key});
+  const MemoCardView({
+    required this.theme,
+    super.key,
+  });
 
-  @override
-  State<MemoCardView> createState() => _MemoCardViewState();
-}
-
-class _MemoCardViewState extends State<MemoCardView> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Memo>>(
@@ -77,13 +132,13 @@ class _MemoCardViewState extends State<MemoCardView> {
                 key: Key(memoData.id.toString()),
                 direction: DismissDirection.endToStart,
                 background: Container(
-                  color: PRIMARY_COLOR,
+                  color: theme.PRIMARY_COLOR,
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.only(right: 16.0),
                   child: Text(
                     "삭 제",
                     style: TextStyle(
-                        color: WHITE_COLOR,
+                        color: theme.WHITE_COLOR,
                         fontWeight: FontWeight.w600,
                         fontSize: 16),
                   ),
@@ -93,14 +148,16 @@ class _MemoCardViewState extends State<MemoCardView> {
                     final result = await showDialog(
                       context: context,
                       builder: (context) {
-                        return const CustomDialog();
+                        return CustomDialog(
+                          theme: theme,
+                        );
                       },
                     );
                     if (result == true) {
                       GetIt.I<LocalDatabase>().removeMemo(memoData.id);
                     }
                   }
-                  return ;
+                  return;
                 },
                 child: GestureDetector(
                   onTap: () {
@@ -110,6 +167,7 @@ class _MemoCardViewState extends State<MemoCardView> {
                           isEdit: true,
                           memoId: memoData.id,
                           dateTime: memoData.date,
+                          theme: theme,
                         ),
                       ),
                     );
@@ -118,6 +176,7 @@ class _MemoCardViewState extends State<MemoCardView> {
                     firstLine: memoData.firstLine,
                     remainLines: memoData.remainingLines,
                     dateTime: memoData.date,
+                    theme: theme,
                   ),
                 ),
               );

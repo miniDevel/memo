@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:memo/const/colors.dart';
+import 'package:memo/const/theme_colors.dart';
 import 'package:memo/const/custom_container.dart';
 
 class MemoCard extends StatelessWidget {
+  final ThemeColors theme;
   final String firstLine;
   final String remainLines;
   final DateTime dateTime;
 
   const MemoCard({
+    required this.theme,
     required this.dateTime,
     required this.firstLine,
     required this.remainLines,
@@ -24,6 +26,7 @@ class MemoCard extends StatelessWidget {
         firstLine.length > 20 ? "${firstLine.substring(0, 20)}..." : firstLine;
 
     return CustomContainer(
+      theme: theme,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: 10.0,
@@ -34,16 +37,16 @@ class MemoCard extends StatelessWidget {
           children: [
             Text(
               limitedFirstLine,
-              style: TextStyle(color: BLACK_COLOR, fontSize: 20),
+              style: TextStyle(color: theme.BLACK_COLOR, fontSize: 20),
             ),
             Text(
               '${dateTime.year}. ${dateTime.month}. ${dateTime.day}  ${dateTime.hour}시',
-              style: TextStyle(color: DARKGREY_COLOR, fontSize: 16),
+              style: TextStyle(color: theme.DARKGREY_COLOR, fontSize: 16),
             ),
             const SizedBox(height: 4),
             Text(
               limitedRemainLines,
-              style: TextStyle(color: DARKGREY_COLOR, fontSize: 14),
+              style: TextStyle(color: theme.DARKGREY_COLOR, fontSize: 14),
             ),
           ],
         ),

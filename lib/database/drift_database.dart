@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:memo/model/color_theme.dart';
 import 'package:memo/model/memo.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -10,6 +11,7 @@ part 'drift_database.g.dart';
 @DriftDatabase(
   tables: [
     Memos,
+    ColorThemes,
   ],
 )
 class LocalDatabase extends _$LocalDatabase {
